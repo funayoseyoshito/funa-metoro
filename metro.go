@@ -1,4 +1,4 @@
-package funa_metro
+package metro
 
 type Metro struct {
 	name string

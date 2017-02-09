@@ -5,7 +5,9 @@ import (
 	"time"
 )
 
-type TrainInfomation struct {
+type TrainInformations2 []TrainInfomation2
+
+type TrainInfomation2 struct {
 	Context                string    `json:"@context"`
 	Id                     string    `json:"@id"`
 	Type                   string    `json:"@type"`
@@ -18,34 +20,16 @@ type TrainInfomation struct {
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
 }
 
-func (t *TrainInformations) Dump() {
-	fmt.Println("11111111111111111111")
-	//fmt.Println(t)
+func (t *TrainInformations2) Dump() {
+	fmt.Println("2222222222222222222")
 	for k, v := range *t {
 		fmt.Println(k, v)
 	}
 }
 
-type TrainInformations []TrainInfomation
-
-func fetchTrainName(railway string) string {
-	name := map[string]string{
-		"Ginza":      "銀座線",
-		"Marunouchi": "丸の内線",
-		"Chiyoda":    "千代田線",
-		"Hibiya":     "日比谷線",
-		"Namboku":    "南北線",
-		"Yurakucho":  "有楽町線",
-		"Fukutoshin": "副都心線",
-		"Hanzomon":   "半蔵門線",
-		"Tozai":      "東西線",
-	}
-	return name[railway]
-}
-
-func (m *Metro) GetODPTTrainInformation() *Metro {
+func (m *Metro) GetODPTTrainInformation2() *Metro {
 	m.apiPath = "datapoints"
 	m.params.rdfType = "odpt:TrainInformation"
-	m.response = &TrainInformations{}
+	m.response = &TrainInformations2{}
 	return m
 }

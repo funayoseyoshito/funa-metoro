@@ -20,6 +20,14 @@ type TrainInfomation2 struct {
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
 }
 
+func (t *TrainInformations2) SetTest() {
+	for k, v := range *t {
+		if k == 0 {
+			v.TrainInformationText = "値を変更"
+		}
+	}
+}
+
 func (t *TrainInformations2) Dump() {
 	fmt.Println("2222222222222222222")
 	for k, v := range *t {

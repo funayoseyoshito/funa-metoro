@@ -33,11 +33,26 @@ func main() {
 
 	m := metro.NewMetro(os.Getenv("metoro_token"))
 	r := m.GetODPTTrainInformation().Execute()
-	r.Dump()
+	r.Parse()
+	//fmt.Println()
+	//r.Parse()
+	//r.Dump()
+	//r.SetTest()
+	//r.Dump()
+	//vv, ok := r.(*metro.TrainInformations)
 
-	fmt.Println("````````````````````")
+	//fmt.Println(ok)
+	//fmt.Println(vv)
 
-	m = metro.NewMetro(os.Getenv("metoro_token"))
-	r = m.GetODPTTrainInformation2().Execute()
-	r.Dump()
+	//for i, v := range *vv {
+	//	fmt.Println(i, v)
+	//}
+	//
+	//vv.Yoshito()
+	//fmt.Println("````````````````````")
+	//r.Dump()
+
+	//m = metro.NewMetro(os.Getenv("metoro_token"))
+	//r = m.GetODPTTrainInformation2().Execute()
+	//r.Dump()
 }

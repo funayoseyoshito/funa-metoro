@@ -5,16 +5,16 @@ import (
 	//"io/ioutil"
 	"log"
 	//"net/http"
+	"encoding/json"
 	"net/url"
 	"reflect"
-	"encoding/json"
 )
 
 const api_base_url = "https://api.tokyometroapp.jp/api/v2"
 
 type Metro struct {
-	apiPath string
-	params  params
+	apiPath  string
+	params   params
 	response ApiResponse
 }
 
@@ -25,6 +25,8 @@ type params struct {
 
 type ApiResponse interface {
 	Dump()
+	SetTest()
+	Parse()
 }
 
 var apiResults interface{}

@@ -18,15 +18,42 @@ type TrainInfomation struct {
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
 }
 
-func (t *TrainInformations) Dump() {
-	fmt.Println("11111111111111111111")
-	//fmt.Println(t)
+func (t *TrainInformations) Parse() ApiResponse {
+	return t
+}
+
+func (t *TrainInformations) SetTest() {
 	for k, v := range *t {
-		fmt.Println(k, v)
+		if k == 0 {
+			v.Railway = "OKOKOKOK"
+		}
 	}
 }
 
-type TrainInformations []TrainInfomation
+func (t *TrainInformations) Yoshito() {
+	fmt.Println("funayose yoshito")
+}
+
+func (t *TrainInformations) Dump() {
+
+	fmt.Printf("%T\n", t)
+
+	fmt.Println("11111111111111111111")
+	//fmt.Println(t)
+
+	for _, v := range *t {
+		//v = TrainInfomation{}
+		//(&v).Railway = "ああああああああああああああああああああああああ"
+		fmt.Println("---------")
+		fmt.Println(v.Railway)
+		//t[i].Railway = "testtestetesttestestsetstest"
+		fmt.Println("---------")
+	}
+
+	fmt.Println(t)
+}
+
+type TrainInformations []*TrainInfomation
 
 func fetchTrainName(railway string) string {
 	name := map[string]string{

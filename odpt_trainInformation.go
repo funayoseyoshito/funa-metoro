@@ -5,6 +5,21 @@ import (
 	"time"
 )
 
+func fetchTrainName(railway string) string {
+	name := map[string]string{
+		"Ginza":      "銀座線",
+		"Marunouchi": "丸の内線",
+		"Chiyoda":    "千代田線",
+		"Hibiya":     "日比谷線",
+		"Namboku":    "南北線",
+		"Yurakucho":  "有楽町線",
+		"Fukutoshin": "副都心線",
+		"Hanzomon":   "半蔵門線",
+		"Tozai":      "東西線",
+	}
+	return name[railway]
+}
+
 type TrainInfomation struct {
 	Context                string    `json:"@context"`
 	Id                     string    `json:"@id"`
@@ -18,21 +33,21 @@ type TrainInfomation struct {
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
 }
 
-func (t *TrainInformations) Parse() ApiResponse {
-	return t
-}
+//func (t *TrainInformations) Parse() ApiResponse {
+//	return t
+//}
 
-func (t *TrainInformations) SetTest() {
-	for k, v := range *t {
-		if k == 0 {
-			v.Railway = "OKOKOKOK"
-		}
-	}
-}
+//func (t *TrainInformations) SetTest() {
+//	for k, v := range *t {
+//		if k == 0 {
+//			v.Railway = "OKOKOKOK"
+//		}
+//	}
+//}
 
-func (t *TrainInformations) Yoshito() {
-	fmt.Println("funayose yoshito")
-}
+//func (t *TrainInformations) Yoshito() {
+//	fmt.Println("funayose yoshito")
+//}
 
 func (t *TrainInformations) Dump() {
 
@@ -55,24 +70,14 @@ func (t *TrainInformations) Dump() {
 
 type TrainInformations []*TrainInfomation
 
-func fetchTrainName(railway string) string {
-	name := map[string]string{
-		"Ginza":      "銀座線",
-		"Marunouchi": "丸の内線",
-		"Chiyoda":    "千代田線",
-		"Hibiya":     "日比谷線",
-		"Namboku":    "南北線",
-		"Yurakucho":  "有楽町線",
-		"Fukutoshin": "副都心線",
-		"Hanzomon":   "半蔵門線",
-		"Tozai":      "東西線",
-	}
-	return name[railway]
+func (m *Metro) GetODPTTrainInformation() *TrainInformations {
+	return m.GetODPTTrainInformationWithParam(params{})
 }
 
-func (m *Metro) GetODPTTrainInformation() *Metro {
+func (m *Metro) GetODPTTrainInformationWithParam(p params) *TrainInformations {
 	m.apiPath = "datapoints"
-	m.params.rdfType = "odpt:TrainInformation"
-	m.response = &TrainInformations{}
-	return m
+	p.rdfType = "odpt:TrainInformation"
+	r := m.requet(&TrainInformations{}, p)
+	t ,_ := r.(*TrainInformations)
+	return t
 }

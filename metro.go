@@ -8,13 +8,15 @@ import (
 	"encoding/json"
 	"net/url"
 	"reflect"
+	//"net/http"
+	//"io/ioutil"
 )
 
 const api_base_url = "https://api.tokyometroapp.jp/api/v2"
 
 type Metro struct {
 	apiPath  string
-	params   params
+	token string
 	response ApiResponse
 }
 
@@ -25,21 +27,17 @@ type params struct {
 
 type ApiResponse interface {
 	Dump()
-	SetTest()
-	Parse()
 }
-
-var apiResults interface{}
 
 //NewMetro return New Metro struct
 func NewMetro(token string) *Metro {
 	m := &Metro{}
-	m.params.consumerKey = token
+	m.token = token
 	return m
 }
 
-func (m *Metro) getRequestUrl() string {
-
+func (m *Metro) getRequestUrl(p params) string {
+	p.consumerKey = m.token
 	u, err := url.Parse(api_base_url)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +46,7 @@ func (m *Metro) getRequestUrl() string {
 	u.Path += "/" + m.apiPath
 	q := u.Query()
 
-	rt, rv := reflect.TypeOf(m.params), reflect.ValueOf(m.params)
+	rt, rv := reflect.TypeOf(p), reflect.ValueOf(p)
 	for i := 0; i < rt.NumField(); i++ {
 		field := rt.Field(i)
 		k := field.Tag.Get("param")
@@ -63,9 +61,10 @@ func (m *params) set() {
 	fmt.Println("hello")
 }
 
-func (m *Metro) Execute() ApiResponse {
+func (m *Metro) requet(t ApiResponse, p params) ApiResponse {
 
-	//url := m.getRequestUrl()
+	url := m.getRequestUrl(p)
+	fmt.Println(url)
 	//res, err := http.Get(url)
 	//if err != nil {
 	//	log.Fatal(err)
@@ -82,11 +81,11 @@ func (m *Metro) Execute() ApiResponse {
 	//fmt.Println(string(body))
 	//fmt.Println("==========")
 
-	err := json.Unmarshal(body, &m.response)
+	err := json.Unmarshal(body, &t)
 	if err != nil {
 		fmt.Println("ここ！")
 		log.Fatal(err)
 	}
 
-	return m.response
+	return t
 }

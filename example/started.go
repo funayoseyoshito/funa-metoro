@@ -32,8 +32,11 @@ func main() {
 	//panic("================>ok")
 
 	m := metro.NewMetro(os.Getenv("metoro_token"))
-	r := m.GetODPTTrainInformation().Execute()
-	r.Parse()
+	t := m.GetODPTTrainInformation()
+	fmt.Println(t)
+	//r := m.GetODPTTrainInformation()
+	//fmt.Println(r)
+	//r.Parse()
 	//fmt.Println()
 	//r.Parse()
 	//r.Dump()

@@ -3,6 +3,7 @@ package metro
 import (
 	"fmt"
 	"time"
+	"strings"
 )
 
 func fetchTrainName(railway string) string {
@@ -22,7 +23,7 @@ func fetchTrainName(railway string) string {
 
 type TrainInfomation struct {
 	Context                string    `json:"@context"`
-	Id                     string    `json:"@id"`
+	ID                     string    `json:"@id"`
 	Type                   string    `json:"@type"`
 	Date                   time.Time `json:"dc:date"`
 	Valid                  time.Time `json:"dct:valid"`
@@ -31,44 +32,26 @@ type TrainInfomation struct {
 	Railway                string    `json:"odpt:railway"`
 	TrainInformationStatus string    `json:"odpt:trainInformationStatus"`
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
+
 }
 
-//func (t *TrainInformations) Parse() ApiResponse {
-//	return t
-//}
+func (t TrainInfomation) getID () string {
+	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
+}
 
-//func (t *TrainInformations) SetTest() {
-//	for k, v := range *t {
-//		if k == 0 {
-//			v.Railway = "OKOKOKOK"
-//		}
-//	}
-//}
 
-//func (t *TrainInformations) Yoshito() {
-//	fmt.Println("funayose yoshito")
-//}
+
+type TrainInformations []TrainInfomation
 
 func (t *TrainInformations) Dump() {
 
-	fmt.Printf("%T\n", t)
-
-	fmt.Println("11111111111111111111")
-	//fmt.Println(t)
-
 	for _, v := range *t {
-		//v = TrainInfomation{}
-		//(&v).Railway = "ああああああああああああああああああああああああ"
-		fmt.Println("---------")
-		fmt.Println(v.Railway)
-		//t[i].Railway = "testtestetesttestestsetstest"
-		fmt.Println("---------")
+		fmt.Printf("\n%s\n",v)
+		//fmt.Println(v.getID())
+		fmt.Println(v.Date)
 	}
-
-	fmt.Println(t)
 }
 
-type TrainInformations []*TrainInfomation
 
 func (m *Metro) GetODPTTrainInformation() *TrainInformations {
 	return m.GetODPTTrainInformationWithParam(params{})

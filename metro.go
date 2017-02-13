@@ -83,7 +83,6 @@ func (m *Metro) requet(t ApiResponse, p params) ApiResponse {
 
 	err := json.Unmarshal(body, &t)
 	if err != nil {
-		fmt.Println("ここ！")
 		log.Fatal(err)
 	}
 

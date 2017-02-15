@@ -2,24 +2,9 @@ package metro
 
 import (
 	"fmt"
-	"time"
 	"strings"
+	"time"
 )
-
-func fetchTrainName(railway string) string {
-	name := map[string]string{
-		"Ginza":      "銀座線",
-		"Marunouchi": "丸の内線",
-		"Chiyoda":    "千代田線",
-		"Hibiya":     "日比谷線",
-		"Namboku":    "南北線",
-		"Yurakucho":  "有楽町線",
-		"Fukutoshin": "副都心線",
-		"Hanzomon":   "半蔵門線",
-		"Tozai":      "東西線",
-	}
-	return name[railway]
-}
 
 type TrainInfomation struct {
 	Context                string    `json:"@context"`
@@ -32,35 +17,36 @@ type TrainInfomation struct {
 	Railway                string    `json:"odpt:railway"`
 	TrainInformationStatus string    `json:"odpt:trainInformationStatus"`
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
-
 }
 
-func (t TrainInfomation) getID () string {
+func (t TrainInfomation) UCODE() string {
 	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
 }
 
+func (t TrainInfomation) OperatorName() string {
+	return getODPTOperatorName(t.Operator)
+}
 
+func (t TrainInfomation) RailsWayName() string {
+	return getODPTRailWayName(t.Railway)
+}
 
 type TrainInformations []TrainInfomation
 
 func (t *TrainInformations) Dump() {
-
 	for _, v := range *t {
-		fmt.Printf("\n%s\n",v)
-		//fmt.Println(v.getID())
-		fmt.Println(v.Date)
+		fmt.Printf("\n%s", v)
 	}
 }
 
-
 func (m *Metro) GetODPTTrainInformation() *TrainInformations {
-	return m.GetODPTTrainInformationWithParam(params{})
+	return m.GetODPTTrainInformationWithParam(Params{})
 }
 
-func (m *Metro) GetODPTTrainInformationWithParam(p params) *TrainInformations {
+func (m *Metro) GetODPTTrainInformationWithParam(p Params) *TrainInformations {
 	m.apiPath = "datapoints"
 	p.rdfType = "odpt:TrainInformation"
 	r := m.requet(&TrainInformations{}, p)
-	t ,_ := r.(*TrainInformations)
+	t, _ := r.(*TrainInformations)
 	return t
 }

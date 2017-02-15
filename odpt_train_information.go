@@ -39,14 +39,14 @@ func (t *TrainInformations) Dump() {
 	}
 }
 
-func (m *Metro) GetODPTTrainInformation() *TrainInformations {
-	return m.GetODPTTrainInformationWithParam(Params{})
+func (m *Metro) GetODPTTrainInformation() TrainInformations {
+	return m.GetODPTTrainInformationWithParam(&Params{})
 }
 
-func (m *Metro) GetODPTTrainInformationWithParam(p Params) *TrainInformations {
+func (m *Metro) GetODPTTrainInformationWithParam(p *Params) TrainInformations {
 	m.apiPath = "datapoints"
 	p.rdfType = "odpt:TrainInformation"
 	r := m.requet(&TrainInformations{}, p)
 	t, _ := r.(*TrainInformations)
-	return t
+	return *t
 }

@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/funayoseyoshito/metro"
-	"github.com/k0kubun/pp"
 )
 
 func main() {
@@ -18,17 +17,32 @@ func main() {
 
 	for _, v := range s {
 		fmt.Println("=================")
+
+		fmt.Println(v.UCODE())
+		fmt.Println(v.OwlSameAs)
+		fmt.Println(v.DcDate)
+		fmt.Println(v.OdptStation)
+		fmt.Println(v.StationName())
+		//fmt.Println(v.OdptStation)
+		//fmt.Println(v.OdptStation, v.OdptRailDirection)
+
 		//fmt.Println(v)
 		//fmt.Println(v.OdptStation)
 		//fmt.Println(v)
 		//pp.Println(v.OdptWeekdays)
-		for i, t := range v.OdptWeekdays {
-			if i > 0 && i < 2 {
 
-				pp.Println(t)
-			}
-		}
+		//for _, t := range v.OdptWeekdays {
+		//	fmt.Println(t)
+		//}
+
+		//for _, t := range v.OdptSaturdays {
+		//	fmt.Println(t)
+		//}
+
+		//for _, t := range v.OdptHolidays {
+		//	fmt.Println(t)
+		//}
+
 		fmt.Println("=================")
 	}
-
 }

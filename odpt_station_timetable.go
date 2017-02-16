@@ -2,6 +2,7 @@ package metro
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -32,9 +33,14 @@ type StationTimeTableObject []struct {
 
 type StationTimeTables []StationTimeTable
 
-//func (t TrainInfomation) UCODE() string {
-//	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
-//}
+func (t StationTimeTable) UCODE() string {
+	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
+}
+
+func (t StationTimeTable) StationName() string {
+	return strings.Replace(t.OdptStation, "odpt.Station:", "", -1)
+}
+
 //
 //func (t TrainInfomation) OperatorName() string {
 //	return getODPTOperatorName(t.Operator)

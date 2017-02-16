@@ -33,8 +33,8 @@ func (t TrainInfomation) RailsWayName() string {
 
 type TrainInformations []TrainInfomation
 
-func (t *TrainInformations) Dump() {
-	for _, v := range *t {
+func (t TrainInformations) Dump() {
+	for _, v := range t {
 		fmt.Printf("\n%s", v)
 	}
 }

@@ -69,9 +69,6 @@ func (m *Metro) GetStationTimeTableWithParam(p *Params) StationTimeTables {
 	m.apiPath = "datapoints"
 	p.rdfType = "odpt:StationTimetable"
 
-	//fmt.Println("=======")
-	////fmt.Println()
-	//pp.Println(&StationTimeTables{})
 	//fmt.Println(reflect.TypeOf(&StationTimetable{}))
 	//fmt.Println("=======")
 	//panic("----")

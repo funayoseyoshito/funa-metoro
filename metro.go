@@ -20,6 +20,10 @@ type Metro struct {
 	response APIResponser
 }
 
+type APIResponser interface {
+	Dump()
+}
+
 type Params struct {
 	rdfType                    string `param:"rdf:type"`
 	consumerKey                string `param:"acl:consumerKey"`
@@ -31,8 +35,15 @@ type Params struct {
 	ODPStation                 string `param:"odpt:station"`
 }
 
-type APIResponser interface {
-	Dump()
+type Param map[string]interface{}
+
+func NewParam() Param {
+	return make(Param, 5)
+}
+
+func (p Param) Set(k string, v interface{}) Param {
+	p[k] = v
+	return p
 }
 
 //NewMetro return New Metro struct

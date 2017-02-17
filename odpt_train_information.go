@@ -19,6 +19,9 @@ type TrainInfomation struct {
 	TrainInformationText   string    `json:"odpt:trainInformationText"`
 }
 
+type TraininfomatinoParam struct {
+}
+
 func (t TrainInfomation) UCODE() string {
 	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
 }

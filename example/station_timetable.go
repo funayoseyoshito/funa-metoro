@@ -5,10 +5,32 @@ import (
 
 	"fmt"
 
+	"strconv"
+
 	"github.com/funayoseyoshito/metro"
 )
 
 func main() {
+	p := metro.NewParam().Set("odpt:station", "odpt.Station:TokyoMetro.Chiyoda.Ayase").Set("yoshito", 29)
+	fmt.Println(p)
+	panic("======")
+
+	for i, v := range p {
+		fmt.Println(i)
+
+		var getValue string
+		switch x := v.(type) {
+		case int:
+			getValue = strconv.Itoa(x)
+		case string:
+			getValue = x
+		case bool:
+			getValue = strconv.FormatBool(x)
+		default:
+			panic("param must be string or int")
+		}
+		fmt.Println(getValue)
+	}
 
 	m := metro.NewMetro(os.Getenv("metoro_token"))
 	s := m.GetStationTimeTableWithParam(&metro.Params{ODPStation: "odpt.Station:TokyoMetro.Chiyoda.Ayase"})

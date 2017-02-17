@@ -2,12 +2,12 @@ package metro
 
 import (
 	"fmt"
+	"strconv"
 	//"io/ioutil"
 	"log"
 	//"net/http"
 	"encoding/json"
 	"net/url"
-	"reflect"
 	//"net/http"
 	//"io/ioutil"
 )
@@ -18,6 +18,7 @@ type Metro struct {
 	apiPath  string
 	token    string
 	response APIResponser
+	param    Param
 }
 
 type APIResponser interface {
@@ -37,24 +38,20 @@ type Params struct {
 
 type Param map[string]interface{}
 
-func NewParam() Param {
-	return make(Param, 5)
-}
-
-func (p Param) Set(k string, v interface{}) Param {
-	p[k] = v
-	return p
-}
-
 //NewMetro return New Metro struct
 func NewMetro(token string) *Metro {
 	m := &Metro{}
-	m.token = token
+	m.param = make(Param, 5)
+	m.SetParam("acl:consumerKey", token)
 	return m
 }
 
-func (m *Metro) getRequestURI(p *Params) string {
-	p.consumerKey = m.token
+func (m *Metro) SetParam(k string, v interface{}) *Metro {
+	m.param[k] = v
+	return m
+}
+
+func (m *Metro) getRequestURI(p Param) string {
 	u, err := url.Parse(APIBaseUrl)
 	if err != nil {
 		log.Fatal(err)
@@ -63,26 +60,29 @@ func (m *Metro) getRequestURI(p *Params) string {
 	u.Path += "/" + m.apiPath
 	q := u.Query()
 
-	rt, rv := reflect.TypeOf(*p), reflect.ValueOf(*p)
-	for i := 0; i < rt.NumField(); i++ {
-		field := rt.Field(i)
-		k := field.Tag.Get("param")
-		if v := rv.Field(i).String(); v != "" {
-			q.Add(k, v)
+	for k, v := range p {
+		var getStringValue string
+		switch x := v.(type) {
+		case int:
+			getStringValue = strconv.Itoa(x)
+		case string:
+			getStringValue = x
+		case bool:
+			getStringValue = strconv.FormatBool(x)
+		default:
+			panic("param must be string or int")
 		}
+		q.Add(k, getStringValue)
 	}
+
 	u.RawQuery = q.Encode()
 	return u.String()
 }
 
-func (m *Params) set() {
-	fmt.Println("hello")
-}
-
 // request
-func (m *Metro) requet(t APIResponser, p *Params) APIResponser {
+func (m *Metro) requet(t APIResponser) APIResponser {
 
-	url := m.getRequestURI(p)
+	url := m.getRequestURI(m.param)
 	fmt.Println(url)
 	//res, err := http.Get(url)
 	//if err != nil {

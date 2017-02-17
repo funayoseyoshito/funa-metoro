@@ -58,22 +58,10 @@ func (t *StationTimeTables) Dump() {
 	}
 }
 
-//
-//func (m *Metro) GetStationTimeTable() *TrainInformations {
-//	return m.GetODPTTrainInformationWithParam()
-//}
-//
-////
-
-func (m *Metro) GetStationTimeTableWithParam(p *Params) StationTimeTables {
+func (m *Metro) StationTimeTable() StationTimeTables {
 	m.apiPath = "datapoints"
-	p.rdfType = "odpt:StationTimetable"
-
-	//fmt.Println(reflect.TypeOf(&StationTimetable{}))
-	//fmt.Println("=======")
-	//panic("----")
-
-	r := m.requet(&StationTimeTables{}, p)
+	m.SetParam("rdf:type", "odpt:StationTimetable")
+	r := m.requet(&StationTimeTables{})
 	t, _ := r.(*StationTimeTables)
 
 	return *t

@@ -7,21 +7,21 @@ import (
 )
 
 type StationTimeTable struct {
-	Context           string                 `json:"@context"`
-	ID                string                 `json:"@id"`
-	Type              string                 `json:"@type"`
-	OwlSameAs         string                 `json:"owl:sameAs"`
-	DcDate            time.Time              `json:"dc:date"`
-	OdptStation       string                 `json:"odpt:station"`
-	OdptRailway       string                 `json:"odpt:railway"`
-	OdptOperator      string                 `json:"odpt:operator"`
-	OdptRailDirection string                 `json:"odpt:railDirection"`
-	OdptWeekdays      StationTimeTableObject `json:"odpt:weekdays"`
-	OdptSaturdays     StationTimeTableObject `json:"odpt:saturdays"`
-	OdptHolidays      StationTimeTableObject `json:"odpt:holidays"`
+	Context           string                   `json:"@context"`
+	ID                string                   `json:"@id"`
+	Type              string                   `json:"@type"`
+	OwlSameAs         string                   `json:"owl:sameAs"`
+	DcDate            time.Time                `json:"dc:date"`
+	OdptStation       string                   `json:"odpt:station"`
+	OdptRailway       string                   `json:"odpt:railway"`
+	OdptOperator      string                   `json:"odpt:operator"`
+	OdptRailDirection string                   `json:"odpt:railDirection"`
+	OdptWeekdays      []StationTimeTableObject `json:"odpt:weekdays"`
+	OdptSaturdays     []StationTimeTableObject `json:"odpt:saturdays"`
+	OdptHolidays      []StationTimeTableObject `json:"odpt:holidays"`
 }
 
-type StationTimeTableObject []struct {
+type StationTimeTableObject struct {
 	OdptDepartureTime      string `json:"odpt:departureTime"`
 	OdptDestinationStation string `json:"odpt:destinationStation"`
 	OdptTrainType          string `json:"odpt:trainType"`
@@ -37,20 +37,25 @@ func (t StationTimeTable) UCODE() string {
 	return strings.Replace(t.ID, "urn:ucode:_", "", -1)
 }
 
-func (t StationTimeTable) StationName() string {
-	return strings.Replace(t.OdptStation, "odpt.Station:", "", -1)
+func (t StationTimeTable) OperatorName() string {
+	return getODPTOperatorName(t.OdptOperator)
 }
 
-//
-//func (t TrainInfomation) OperatorName() string {
-//	return getODPTOperatorName(t.Operator)
-//}
-//
-//func (t TrainInfomation) RailsWayName() string {
-//	return getODPTRailWayName(t.Railway)
-//}
-//
-//
+func (t StationTimeTable) RailsWayName() string {
+	return getODPTRailWayName(t.OdptRailway)
+}
+
+func (t StationTimeTable) RailDirection() string {
+	return getODPTRailDirectionName(t.OdptRailDirection)
+}
+
+func (t StationTimeTableObject) DestinationStation() string {
+	return getODPTStationName(t.OdptDestinationStation)
+}
+
+func (t StationTimeTableObject) TrainTypeName() string {
+	return getODPTTrainType(t.OdptTrainType)
+}
 
 func (t *StationTimeTables) Dump() {
 	for _, v := range *t {
@@ -59,6 +64,11 @@ func (t *StationTimeTables) Dump() {
 }
 
 func (m *Metro) StationTimeTable() StationTimeTables {
+
+	if !(m.isSetParam("odpt:station") || m.isSetParam("odpt:railway")) {
+		panic("odpt:station or odpt:railway is not set")
+	}
+
 	m.apiPath = "datapoints"
 	m.SetParam("rdf:type", "odpt:StationTimetable")
 	r := m.requet(&StationTimeTables{})

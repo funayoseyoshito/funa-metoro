@@ -63,7 +63,7 @@ func (t *StationTimeTables) Dump() {
 	}
 }
 
-func (m *Metro) StationTimeTable() StationTimeTables {
+func (m *Metro) ODPTStationTimeTable() StationTimeTables {
 
 	if !(m.isSetParam("odpt:station") || m.isSetParam("odpt:railway")) {
 		panic("odpt:station or odpt:railway is not set")

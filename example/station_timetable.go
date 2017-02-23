@@ -10,7 +10,7 @@ import (
 func main() {
 	m := metro.NewMetro(os.Getenv("metoro_token")).
 		SetParam("odpt:station", "odpt.Station:TokyoMetro.Chiyoda.Ayase")
-	s := m.StationTimeTable()
+	s := m.ODPTStationTimeTable()
 
 	for _, v := range s {
 
